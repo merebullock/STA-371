@@ -53,4 +53,6 @@ nba.ncaa.data <- subset(nba.data, NBA_ppg > 0 & active_from >= 2004
                           NCAA_fgpct != 'NA' & NCAA_ppg > 0 & 
                           position != 'NA' & NCAA__3ptpct != 0 & 
                           NCAA__3ptpct != 1)
+nba.ncaa.data$NCAA_ftpct <- nba.ncaa.data$NCAA_ftpg / nba.ncaa.data$NCAA_ftapg
+
 View(nba.ncaa.data)
