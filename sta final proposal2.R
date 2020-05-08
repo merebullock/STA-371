@@ -48,6 +48,7 @@ nba.data$height.inches[nba.data$height == '7-7'] <- 91
 nba.data$height.inches <- as.integer(nba.data$height.inches)
 View(nba.data)
 nba.ncaa.data <- subset(nba.data, NBA_ppg > 0 & active_from >= 2004 & active_from <= 2010 & college != '' & NCAA__3ptpct != 'NA' & NCAA_ft != 'NA' & NCAA_fgpct != 'NA' & NCAA_ppg > 0 & position != 'NA')
+nba.ncaa.data$NCAA_ftpct <- nba.ncaa.data$NCAA_ftpg / nba.ncaa.data$NCAA_ftapg
 
 View(nba.ncaa.data)
 
@@ -92,15 +93,15 @@ anova(lm(NBA_ppg ~ position, data = nba.ncaa.data))
 
 View(nba.ncaa.data)
 
-nba.ncaa.data$log.NBA_ppg <- log(nba.ncaa.data$NCAA_fgpg)
-plot(log(nba.ncaa.data$NCAA_ftpg), nba.ncaa.data$log.NBA_ppg)
-plot(log(nba.ncaa.data$NCAA_ft), nba.ncaa.data$log.NBA_ppg)
+nba.ncaa.data$log.nba.ppg <- log(nba.ncaa.data$NBA_ppg)
 
-model7 <- lm(log.NBA_ppg ~ log(NCAA_ft) + NCAA_fgpct + NCAA_ppg, data = nba.ncaa.data)
+cor(log(nba.ncaa.data$NCAA_ftpg), nba.ncaa.data$log.nba.ppg)
+plot(log(nba.ncaa.data$NCAA_ft), nba.ncaa.data$log.nba.ppg)
+plot(nba.ncaa.data$NCAA__3ptpct, nba.ncaa.data$log.nba.ppg)
+cor(nba.ncaa.data$NCAA_ppg, nba.ncaa.data$log.nba.ppg)
+
+model7 <- lm(log.nba.ppg ~ log(NCAA_ft) + position + NCAA_ppg, data = nba.ncaa.data)
 summary(model7)
-plot(model7)
-library(leaps)
-plot(regsubsets(NBA_ppg ~ position + NCAA_games + NCAA__3ptpct * NCAA_ft + height.inches + NCAA_fgpct * NCAA_ppg, data = nba.ncaa.data), scale = 'adjr2')
 
 write.csv(nba.ncaa.data, "statprojectdata.csv", row.names = F)
 write.csv(nba.ncaa.data, "C:\\ThisPC\\Documents\\nba_ncaa_data.csv")
