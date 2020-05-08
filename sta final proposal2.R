@@ -47,14 +47,10 @@ nba.data$height.inches[nba.data$height == '7-7'] <- 91
 #convert height into ints from factor
 nba.data$height.inches <- as.integer(nba.data$height.inches)
 View(nba.data)
-nba.data <- subset(nba.data, NCAA__3ptpct != 'NA' & NCAA_ft != 'NA' & NCAA_fgpct != 'NA' & NCAA_ppg > 0 & position != 'NA')
-
-#subset data with only those who went to college included
-nba.ncaa.data <- subset(nba.data, college != '')
+nba.ncaa.data <- subset(nba.data, active_from >= 2004 & active_from <= 2010 & college != '' & NCAA__3ptpct != 'NA' & NCAA_ft != 'NA' & NCAA_fgpct != 'NA' & NCAA_ppg > 0 & position != 'NA')
 
 View(nba.ncaa.data)
 
-write.csv(nba.ncaa.data, "statprojectdata.csv", row.names = F)
 
 #nba.ncaa.data is the data that will be used in the regression analysis
 
@@ -96,4 +92,12 @@ anova(lm(NBA_ppg ~ position, data = nba.ncaa.data))
 
 View(nba.ncaa.data)
 
-cor(nba.ncaa.data$position, nba.ncaa.data$NBA_ppg)
+nba.ncaa.data$log.NBA_ppg <- log(nba.ncaa.data$NCAA_fgpg)
+model7 <- lm(log(NBA_ppg) ~ position + NCAA_games + NCAA__3ptpct * NCAA_ft + NCAA_fgpct * NCAA_ppg, data = nba.ncaa.data)
+summary(model7)
+plot(model7)
+library(leaps)
+plot(regsubsets(NBA_ppg ~ position + NCAA_games + NCAA__3ptpct * NCAA_ft + height.inches + NCAA_fgpct * NCAA_ppg, data = nba.ncaa.data), scale = 'adjr2')
+
+write.csv(nba.ncaa.data, "statprojectdata.csv", row.names = F)
+write.csv(nba.ncaa.data, "C:\\ThisPC\\Documents\\nba_ncaa_data.csv")
