@@ -47,7 +47,7 @@ nba.data$height.inches[nba.data$height == '7-7'] <- 91
 #convert height into ints from factor
 nba.data$height.inches <- as.integer(nba.data$height.inches)
 View(nba.data)
-nba.ncaa.data <- subset(nba.data, active_from >= 2004 & active_from <= 2010 & college != '' & NCAA__3ptpct != 'NA' & NCAA_ft != 'NA' & NCAA_fgpct != 'NA' & NCAA_ppg > 0 & position != 'NA')
+nba.ncaa.data <- subset(nba.data, NBA_ppg > 0 & active_from >= 2004 & active_from <= 2010 & college != '' & NCAA__3ptpct != 'NA' & NCAA_ft != 'NA' & NCAA_fgpct != 'NA' & NCAA_ppg > 0 & position != 'NA')
 
 View(nba.ncaa.data)
 
@@ -93,7 +93,10 @@ anova(lm(NBA_ppg ~ position, data = nba.ncaa.data))
 View(nba.ncaa.data)
 
 nba.ncaa.data$log.NBA_ppg <- log(nba.ncaa.data$NCAA_fgpg)
-model7 <- lm(log(NBA_ppg) ~ position + NCAA_games + NCAA__3ptpct * NCAA_ft + NCAA_fgpct * NCAA_ppg, data = nba.ncaa.data)
+plot(log(nba.ncaa.data$NCAA_ftpg), nba.ncaa.data$log.NBA_ppg)
+plot(log(nba.ncaa.data$NCAA_ft), nba.ncaa.data$log.NBA_ppg)
+
+model7 <- lm(log.NBA_ppg ~ log(NCAA_ft) + NCAA_fgpct + NCAA_ppg, data = nba.ncaa.data)
 summary(model7)
 plot(model7)
 library(leaps)
