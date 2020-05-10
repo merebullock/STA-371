@@ -4,6 +4,8 @@ View(data)
 library(leaps)
 plot(regsubsets(NBA_ppg ~ NCAA_games + position + NCAA_ft + NCAA__3ptpct + NCAA_fgpct + NCAA_ppg + height.inches, data = data), scale = 'adjr2')
 
+library(car)
+
 #data analytics for NCAA Games indicator variable
 plot(nba.ncaa.data$NCAA_games, (nba.ncaa.data$NBA_ppg),
      xlab = 'NCAA Games Played', ylab = 'NBA Points Per Game',
@@ -69,30 +71,37 @@ boxplot(data$height.inches, horizontal = T)
 #remove college because too many categories and remove height because insignificant
 model1 <- lm(NBA_ppg ~ NCAA_ftpct + NCAA_fgpct + NCAA_ppg + NCAA__3ptpct + NCAA_games + position, data = data)
 summary(model1)
+anova(model1)
 
 #create interaction
 model2 <- lm(NBA_ppg ~ NCAA_ftpct * NCAA_fgpct + NCAA_ppg + NCAA__3ptpct + NCAA_games + position, data = data)
 summary(model2)
+anova(model2)
 
 #remove 3ptpct because not significant, keep interaction
 model3 <- lm(NBA_ppg ~ NCAA_ftpct * NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model3)
+anova(model3)
 
 #remove interaction, trasnform free throw percentage
 model4 <- lm(NBA_ppg ~ log(NCAA_ftpct) + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model4)
+anova(model4)
 
 #transform NBA ppg, keep transformation on free throw percentage
 model5 <- lm(log(NBA_ppg) ~ log(NCAA_ftpct) + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model5)
+anova(model5)
 
 #transform NBA ppg, remove transformation on free throw percentage
 model6 <- lm(log(NBA_ppg) ~ NCAA_ftpct + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model6)
+anova(model6)
 
 #remove transformation on NBA ppg; this is our final model with no transformations or interactions
 model7 <- lm(NBA_ppg ~ NCAA_ftpct + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model7)
+anova(model7)
 
 #create model plots
 plot(model7, col = 'blue', pch = 20)
