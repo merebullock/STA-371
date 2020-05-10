@@ -1,7 +1,7 @@
 data <- read.csv("https://raw.githubusercontent.com/merebullock/STA-371/master/statprojectdata.csv")
 View(data)
 
-library(car)
+library(leaps)
 plot(regsubsets(NBA_ppg ~ NCAA_games + position + NCAA_ft + NCAA__3ptpct + NCAA_fgpct + NCAA_ppg + height.inches, data = data), scale = 'adjr2')
 
 #data analytics for NCAA Games indicator variable
