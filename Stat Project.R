@@ -83,7 +83,7 @@ model4 <- lm(NBA_ppg ~ log(NCAA_ftpct) + NCAA_fgpct + NCAA_ppg + NCAA_games, dat
 summary(model4)
 
 #transform NBA ppg, keep transformation on free throw percentage
-model5 <- lm(log(NBA_ppg) ~ NCAA_ftpct + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
+model5 <- lm(log(NBA_ppg) ~ log(NCAA_ftpct) + NCAA_fgpct + NCAA_ppg + NCAA_games, data = data)
 summary(model5)
 
 #transform NBA ppg, remove transformation on free throw percentage
